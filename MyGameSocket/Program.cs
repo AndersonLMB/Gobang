@@ -22,12 +22,13 @@ namespace MyGameSocket
 
 
 
-    public static class PublicGames
+    public static class OnlineGames
     {
         public static List<GobangGame> Games = new List<GobangGame>();
-        public static void AddGame()
+        public static void AddGame(GobangGame game)
         {
-
+            Games.Add(game);
+            Console.WriteLine("Game Added! Administrated by {0}", game.Administrator);
         }
 
         public static GobangGame GetGame(int index)

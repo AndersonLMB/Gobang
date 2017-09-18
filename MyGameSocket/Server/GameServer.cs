@@ -54,6 +54,19 @@ namespace MyGameSocket.Server
                 Player player = new Player(message[1]);
                 OnlinePlayers.AddPlayer(player);
             }
+
+            if (message[0] == "ADMIN")
+            {
+                GobangGame game = new GobangGame();
+                game.Administrator = new Player(message[1]);
+                OnlineGames.AddGame(game);
+
+                //Player player = new Player(message[1]);
+                //OnlinePlayers.AddPlayer(player);
+            }
+
+
+
             base.OnMessage(e);
         }
 

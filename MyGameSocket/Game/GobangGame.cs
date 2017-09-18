@@ -12,6 +12,7 @@ namespace MyGameSocket.Game
 
         public List<Grid> GameGrids = new List<Grid>();
         public List<Player> Players = new List<Player>();
+        public Player Administrator;
 
         public int X, Y;
 
@@ -61,6 +62,10 @@ namespace MyGameSocket.Game
         public Player(string name)
         {
             Name = name;
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }
