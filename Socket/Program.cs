@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading;
 
 
-namespace Socket
+namespace MySocket
 {
     class Program
     {
@@ -18,14 +18,6 @@ namespace Socket
         static void Main(string[] args)
         {
 
-            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8086);
-            server.Start();
-            Console.WriteLine("Server has started on 127.0.0.1:8086.{0}Waiting for a connection...", Environment.NewLine);
-
-            TcpClient client = server.AcceptTcpClient();
-            Console.WriteLine("A client connected.");
-            Console.WriteLine("Hello World");
-            Console.ReadLine();
         }
     }
 
