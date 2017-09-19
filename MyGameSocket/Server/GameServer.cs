@@ -11,6 +11,8 @@ using WebSocketSharp.Net;
 using WebSocketSharp.Server;
 using WebSocketSharp;
 using MyGameSocket.Game;
+using System.Xml;
+using Newtonsoft.Json;
 
 
 namespace MyGameSocket.Server
@@ -23,7 +25,7 @@ namespace MyGameSocket.Server
         public GameServer(string url)
         {
             WSGameServer = new WebSocketServer(url);
-            WSGameServer.AddWebSocketService<PlayerLogin>("/PlayerLogin");
+            WSGameServer.AddWebSocketService<PlayerActions>("/PlayerActions");
         }
 
         public void Start()
@@ -36,7 +38,7 @@ namespace MyGameSocket.Server
 
     }
 
-    class PlayerLogin : WebSocketBehavior
+    class PlayerActions : WebSocketBehavior
     {
 
         protected override void OnOpen()
@@ -51,8 +53,17 @@ namespace MyGameSocket.Server
             //Login
             if (message[0] == "LOGIN")
             {
+
+                string loginStatus;
+                //MyDel del = null;
+                //del = this.AddPlayerCallback;
+                //GameServices.PlayerLogin
                 Player player = new Player(message[1]);
-                OnlinePlayers.AddPlayer(player);
+                OnlinePlayers.AddPlayer(player, out loginStatus);
+                LoginCallback(loginStatus);
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlinePlayers.GetPlayers());
+                Send(json);
+                //Send(OnlinePlayers.GetPlayers());
             }
 
             if (message[0] == "ADMIN")
@@ -60,13 +71,7 @@ namespace MyGameSocket.Server
                 GobangGame game = new GobangGame();
                 game.Administrator = new Player(message[1]);
                 OnlineGames.AddGame(game);
-
-                //Player player = new Player(message[1]);
-                //OnlinePlayers.AddPlayer(player);
             }
-
-
-
             base.OnMessage(e);
         }
 
@@ -74,6 +79,42 @@ namespace MyGameSocket.Server
         {
             base.OnClose(e);
         }
+
+        public void Login(string[] message)
+        {
+
+            MyDel del = null;
+            del = this.AddPlayerCallback;
+
+            Player player = new Player(message[1]);
+            OnlinePlayers.AddPlayer(player, del);
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlinePlayers.GetPlayers());
+            Send(json);
+            //Console.WriteLine(message[2]);
+        }
+        public delegate void MyDel(string status);
+
+        public void AddPlayerCallback(string status) { }
+
+        public void LoginCallback(string status)
+        {
+            switch (status)
+            {
+                case "SUCCESS":
+                    break;
+                case "FAILED":
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        public void LoginSuccess()
+        {
+
+        }
     }
+
 
 }

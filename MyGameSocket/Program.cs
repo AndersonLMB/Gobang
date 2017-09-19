@@ -15,19 +15,28 @@ namespace MyGameSocket
             GameServer gameServer = new GameServer("ws://127.0.0.1:1836");
             gameServer.Start();
 
-            GobangGame game = new GobangGame();
-            Player player1 = new Player("Jiang");
-            game.AddPlayer(player1);
-            game.ExecuteStep(7, 2, player1);
-            game.ExecuteStep(6, 3, player1);
-            game.ExecuteStep(5, 4, player1);
-            game.ExecuteStep(4, 5, player1);
-            game.ExecuteStep(1, 6, player1);
-            game.Drawself();
-            Console.WriteLine(game.Win());
-            game.ExecuteStep(3, 6, player1);
-            game.Drawself();
-            Console.WriteLine(game.Win());
+
+            #region TEST 1 
+            //GobangGame game = new GobangGame();
+            //Player player1 = new Player("Jiang");
+            //game.AddPlayer(player1);
+            //game.ExecuteStep(7, 2, player1);
+            //game.ExecuteStep(6, 3, player1);
+            //game.ExecuteStep(5, 4, player1);
+            //game.ExecuteStep(4, 5, player1);
+            //game.ExecuteStep(1, 6, player1);
+            //game.Drawself();
+            //Console.WriteLine(game.Win());
+            //game.ExecuteStep(3, 6, player1);
+            //game.Drawself();
+            //Console.WriteLine(game.Win());
+            #endregion
+
+
+
+
+
+
             Console.ReadLine();
 
         }
@@ -69,7 +78,51 @@ namespace MyGameSocket
         public static List<Player> Players = new List<Player>();
         public static void AddPlayer(Player player)
         {
-            Players.Add(player);
+            var exist = Players.Find(x => x.Name == player.Name);
+            Console.WriteLine(exist != null ? true : false);
+
+            if (exist == null)
+            {
+                Players.Add(player);
+            }
+            DisplayAllPlayer();
+        }
+        public static void AddPlayer(Player player, out string status)
+        {
+            status = "NULL";
+            var exist = Players.Find(x => x.Name == player.Name);
+            Console.WriteLine(exist != null ? true : false);
+
+            
+
+
+
+
+
+            if (exist == null)
+            {
+                status = "SUCCESS";
+                Players.Add(player);
+            }
+            else
+            {
+                status = "FAILED";
+            }
+            DisplayAllPlayer();
+        }
+        public static void AddPlayer(Player player, Delegate del)
+        {
+            var exist = Players.Find(x => x.Name == player.Name);
+            Console.WriteLine(exist != null ? true : false);
+
+            if (exist == null)
+            {
+
+                Players.Add(player);
+
+            }
+
+
             DisplayAllPlayer();
 
         }
@@ -97,6 +150,11 @@ namespace MyGameSocket
             }
             Console.WriteLine();
         }
+
+        //public List<Player> GetPlayers()
+        //{
+        //    return Players;
+        //}
 
 
     }
