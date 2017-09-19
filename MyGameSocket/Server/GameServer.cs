@@ -60,10 +60,10 @@ namespace MyGameSocket.Server
                 //GameServices.PlayerLogin
                 Player player = new Player(message[1]);
                 OnlinePlayers.AddPlayer(player, out loginStatus);
-                LoginCallback(loginStatus);
+                //LoginCallback(loginStatus);
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlinePlayers.GetPlayers());
                 Send(json);
-                //Send(OnlinePlayers.GetPlayers());
+                LoginCallback(loginStatus);
             }
 
             if (message[0] == "ADMIN")
@@ -101,8 +101,18 @@ namespace MyGameSocket.Server
             switch (status)
             {
                 case "SUCCESS":
+                    Send("LOGIN_SUCCESS");
                     break;
                 case "FAILED":
+                    break;
+                case "NULL":
+                    break;
+                case "NOTFOUND":
+                    break;
+                case "EXISTED":
+                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginCallbackMessage("Already logged in!"));
+                    Send(json);
+
                     break;
                 default:
                     break;
@@ -116,5 +126,18 @@ namespace MyGameSocket.Server
         }
     }
 
+    public class LoginCallbackMessage
+    {
+        public LoginCallbackMessage(string message) => Message = message;
+        public string Message;
+    }
+
+    public class User
+    {
+        public int id;
+        public string name;
+        public string type;
+        public string password;
+    }
 
 }

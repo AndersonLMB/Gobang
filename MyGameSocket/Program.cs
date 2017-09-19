@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MyGameSocket.Game;
 using MyGameSocket.Server;
+using Npgsql;
+using Npgsql.Schema;
+
 
 namespace MyGameSocket
 {
@@ -40,122 +41,5 @@ namespace MyGameSocket
             Console.ReadLine();
 
         }
-    }
-
-
-
-
-    public static class OnlineGames
-    {
-        public static List<GobangGame> Games = new List<GobangGame>();
-        public static void AddGame(GobangGame game)
-        {
-            Games.Add(game);
-            Console.WriteLine("Game Added! Administrated by {0}", game.Administrator);
-        }
-
-        public static GobangGame GetGame(int index)
-        {
-            return Games[index];
-        }
-        //public static List<GobangGame> games = new List<GobangGame>(20);
-
-
-        //public static void AddGame()
-        //{
-
-        //}
-
-        //public static void RemoveGame()
-        //{
-
-        //}
-
-    }
-
-    public static class OnlinePlayers
-    {
-        public static List<Player> Players = new List<Player>();
-        public static void AddPlayer(Player player)
-        {
-            var exist = Players.Find(x => x.Name == player.Name);
-            Console.WriteLine(exist != null ? true : false);
-
-            if (exist == null)
-            {
-                Players.Add(player);
-            }
-            DisplayAllPlayer();
-        }
-        public static void AddPlayer(Player player, out string status)
-        {
-            status = "NULL";
-            var exist = Players.Find(x => x.Name == player.Name);
-            Console.WriteLine(exist != null ? true : false);
-
-            
-
-
-
-
-
-            if (exist == null)
-            {
-                status = "SUCCESS";
-                Players.Add(player);
-            }
-            else
-            {
-                status = "FAILED";
-            }
-            DisplayAllPlayer();
-        }
-        public static void AddPlayer(Player player, Delegate del)
-        {
-            var exist = Players.Find(x => x.Name == player.Name);
-            Console.WriteLine(exist != null ? true : false);
-
-            if (exist == null)
-            {
-
-                Players.Add(player);
-
-            }
-
-
-            DisplayAllPlayer();
-
-        }
-        public static void AddPlayer(string name)
-        {
-            Player player = new Player(name);
-            AddPlayer(player);
-        }
-
-        public static List<Player> GetPlayers()
-        {
-            return Players;
-        }
-
-        public static Player GetPlayer(int index)
-        {
-            return Players[index];
-        }
-
-        public static void DisplayAllPlayer()
-        {
-            for (var i = 0; i < Players.Count; i++)
-            {
-                Console.Write(i.ToString() + ":" + Players[i].Name + " ");
-            }
-            Console.WriteLine();
-        }
-
-        //public List<Player> GetPlayers()
-        //{
-        //    return Players;
-        //}
-
-
     }
 }
