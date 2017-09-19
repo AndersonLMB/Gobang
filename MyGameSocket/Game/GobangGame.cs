@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace MyGameSocket.Game
 {
@@ -13,14 +14,24 @@ namespace MyGameSocket.Game
         public List<Grid> GameGrids = new List<Grid>();
         public List<Player> Players = new List<Player>();
         public Player Administrator;
+        public List<WinLog> WinLogs;
+
 
         public int X, Y;
-
+        public int WinCount;
         public GobangGame()
         {
-            GameGrids.Capacity = 255;
+            //GameGrids.Capacity = 225;
+            //GameGrids.Count = 225;
             this.X = 15;
             this.Y = 15;
+            this.WinCount = 5;
+            for (var i = 0; i < X * Y; i++)
+            {
+                Grid grid = new Grid(-1, "null", DateTime.Now);
+                GameGrids.Add(grid);
+            }
+            WinLogs = new List<WinLog>();
         }
 
         public void AddPlayer(Player player)
@@ -41,6 +52,178 @@ namespace MyGameSocket.Game
         {
             this.GameGrids[X * y + x] = new Grid(value, name, DateTime.Now);
         }
+
+        public Boolean Win()
+        {
+            if (RowWin() || ColumnWin() || BackslashWin() || SlashWin())
+            {
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //RowWin
+        private Boolean RowWin()
+        {
+            int value;
+            bool win = false;
+            for (var y = 0; y < Y; y++)
+            {
+                for (var x = 0; x <= X - WinCount; x++)
+                {
+                    Grid grid = GetGrid(x, y);
+                    value = grid.Value;
+                    if (value != -1)
+                    {
+                        Boolean tempWin = true;
+                        for (var i = 0; i < 5; i++)
+                        {
+                            if (GetGrid(x + i, y).Value != value)
+                            {
+                                tempWin = false;
+                            }
+                        }
+                        if (tempWin)
+                        {
+                            WinLog winLog = new WinLog();
+                            winLog.WinGrid = grid;
+                            winLog.WinType = "ROW";
+                            WinLogs.Add(winLog);
+                            win = tempWin;
+                        }
+                    }
+                }
+            }
+            return win;
+        }
+        //ColumnWin
+        private Boolean ColumnWin()
+        {
+            int value;
+            bool win = false;
+            for (var y = 0; y < Y; y++)
+            {
+                for (var x = 0; x <= X - WinCount; x++)
+                {
+                    Grid grid = GetGrid(x, y);
+                    value = grid.Value;
+                    if (value != -1)
+                    {
+                        Boolean tempWin = true;
+                        for (var i = 0; i < 5; i++)
+                        {
+                            if (GetGrid(x, y + i).Value != value)
+                            {
+                                tempWin = false;
+                            }
+                        }
+                        if (tempWin)
+                        {
+                            WinLog winLog = new WinLog();
+                            winLog.WinGrid = grid;
+                            winLog.WinType = "COLUMN";
+                            WinLogs.Add(winLog);
+                            win = tempWin;
+                        }
+                    }
+                }
+            }
+            return win;
+        }
+        //BackslashWin
+        private Boolean BackslashWin()
+        {
+            int value;
+            bool win = false;
+            for (var y = 0; y < Y; y++)
+            {
+                for (var x = 0; x <= X - WinCount; x++)
+                {
+                    Grid grid = GetGrid(x, y);
+                    value = grid.Value;
+                    if (value != -1)
+                    {
+                        Boolean tempWin = true;
+                        for (var i = 0; i < 5; i++)
+                        {
+                            if (GetGrid(x + i, y + i).Value != value)
+                            {
+                                tempWin = false;
+                            }
+                        }
+                        if (tempWin)
+                        {
+                            WinLog winLog = new WinLog();
+                            winLog.WinGrid = grid;
+                            winLog.WinType = "BACKSLASH";
+                            WinLogs.Add(winLog);
+                            win = tempWin;
+                        }
+                    }
+                }
+            }
+            return win;
+        }
+        //SlashWin
+        private Boolean SlashWin()
+        {
+            int value;
+            bool win = false;
+            for (var y = 0; y < Y - WinCount; y++)
+            {
+                for (var x = 0; x <= X - WinCount; x++)
+                {
+                    Grid grid = GetGrid(x, y + WinCount - 1);
+                    value = grid.Value;
+                    if (value != -1)
+                    {
+                        Boolean tempWin = true;
+                        for (var i = 0; i < 5; i++)
+                        {
+                            if (GetGrid(x + i, y + WinCount - i - 1).Value != value)
+                            {
+                                tempWin = false;
+                            }
+                        }
+                        if (tempWin)
+                        {
+                            WinLog winLog = new WinLog();
+                            winLog.WinGrid = grid;
+                            winLog.WinType = "SLASH";
+                            WinLogs.Add(winLog);
+                            win = tempWin;
+                        }
+                    }
+                }
+            }
+            return win;
+        }
+
+        public void Drawself()
+        {
+            Console.WriteLine();
+            for (var y = 0; y < Y; y++)
+            {
+                for (var x = 0; x < X; x++)
+                {
+                    if (GetGrid(x, y).Value == -1)
+                    {
+                        Console.Write("*");
+                    }
+                    else
+                    {
+                        Console.Write(GetGrid(x, y).Value);
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
+
+
     }
 
     public class Grid
@@ -68,4 +251,12 @@ namespace MyGameSocket.Game
             return Name;
         }
     }
+
+    public class WinLog
+    {
+        public Grid WinGrid;
+        public string WinType;
+
+    }
+
 }
