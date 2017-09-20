@@ -26,6 +26,7 @@ namespace MyGameSocket.Server
         {
             WSGameServer = new WebSocketServer(url);
             WSGameServer.AddWebSocketService<PlayerActions>("/PlayerActions");
+            Console.WriteLine();
         }
 
         public void Start()
@@ -55,9 +56,6 @@ namespace MyGameSocket.Server
             {
 
                 string loginStatus;
-                //MyDel del = null;
-                //del = this.AddPlayerCallback;
-                //GameServices.PlayerLogin
                 Player player = new Player(message[1]);
                 OnlinePlayers.AddPlayer(player, out loginStatus);
                 //LoginCallback(loginStatus);
@@ -90,7 +88,6 @@ namespace MyGameSocket.Server
             OnlinePlayers.AddPlayer(player, del);
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlinePlayers.GetPlayers());
             Send(json);
-            //Console.WriteLine(message[2]);
         }
         public delegate void MyDel(string status);
 
@@ -98,6 +95,7 @@ namespace MyGameSocket.Server
 
         public void LoginCallback(string status)
         {
+            string json;
             switch (status)
             {
                 case "SUCCESS":
@@ -108,11 +106,12 @@ namespace MyGameSocket.Server
                 case "NULL":
                     break;
                 case "NOTFOUND":
+                    json = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginCallbackMessage("User not found!"));
+                    Send(json);
                     break;
                 case "EXISTED":
-                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginCallbackMessage("Already logged in!"));
+                    json = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginCallbackMessage("Already logged in!"));
                     Send(json);
-
                     break;
                 default:
                     break;
@@ -128,8 +127,8 @@ namespace MyGameSocket.Server
 
     public class LoginCallbackMessage
     {
-        public LoginCallbackMessage(string message) => Message = message;
-        public string Message;
+        public LoginCallbackMessage(string messageString) => MessageString = messageString;
+        public string MessageString;
     }
 
     public class User
