@@ -18,6 +18,11 @@ namespace MyGameSocket
         {
             return Games[index];
         }
+
+        public static List<GobangGame> GetGames()
+        {
+            return Games;
+        }
         //public static List<GobangGame> games = new List<GobangGame>(20);
 
 

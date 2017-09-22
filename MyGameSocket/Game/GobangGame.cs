@@ -15,7 +15,8 @@ namespace MyGameSocket.Game
         public List<Player> Players = new List<Player>();
         public Player Administrator;
         public List<WinLog> WinLogs;
-
+        public int Time;
+        //public int UnixTime;
 
         public int X, Y;
         public int WinCount;
@@ -23,9 +24,11 @@ namespace MyGameSocket.Game
         {
             //GameGrids.Capacity = 225;
             //GameGrids.Count = 225;
-            this.X = 15;
-            this.Y = 15;
-            this.WinCount = 5;
+            X = 15;
+            Y = 15;
+            WinCount = 5;
+            //Time = DateTime.Now;
+            Time = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             for (var i = 0; i < X * Y; i++)
             {
                 Grid grid = new Grid(-1, "null", DateTime.Now);
@@ -235,7 +238,7 @@ namespace MyGameSocket.Game
             this.Time = time;
         }
         public string PlayerName;
-        public DateTime Time;
+        private DateTime Time;
         public int Value;
     }
 
