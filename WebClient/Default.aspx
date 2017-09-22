@@ -31,7 +31,7 @@
     </div>
     <script>
         var adminSocket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
-        
+
 
 
         adminSocket.addGame = function () { }
@@ -44,10 +44,14 @@
             console.log(e);
             var data = e.data;
             data = JSON.parse(data);
+
+
+
             if (data.Token) {
                 token = data.Token;
             }
-            console.log(data);
+
+
         }
 
 
