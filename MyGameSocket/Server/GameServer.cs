@@ -220,9 +220,10 @@ namespace MyGameSocket.Server
 
                     if (pass == true)
                     {
-                        LoginCallbackMessage loginCallbackMessage = new LoginCallbackMessage("TOKEN " + correctToken.ToString());
-                        loginCallbackMessage.Token = correctToken;
-                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(loginCallbackMessage);
+                        DynamicMessage loginMessage = new DynamicMessage("LOGIN_SUCCESS", correctToken);
+                        //LoginCallbackMessage loginCallbackMessage = new LoginCallbackMessage("SUCCESS");
+                        //loginCallbackMessage.Token = correctToken;
+                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(loginMessage);
                         Send(json);
                     }
                     else
@@ -307,7 +308,16 @@ namespace MyGameSocket.Server
             this.Games = OnlineGames.GetGames();
             this.Players = OnlinePlayers.GetPlayers();
         }
-
     }
+    public class DynamicMessage
+    {
+        public string Head { get; set; }
+        public dynamic Body { get; set; }
 
+        public DynamicMessage(string head, dynamic dynamicObject)
+        {
+            Head = head;
+            Body = dynamicObject;
+        }
+    }
 }

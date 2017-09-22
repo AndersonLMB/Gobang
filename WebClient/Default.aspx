@@ -7,8 +7,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script src="Lib/jquery-3.2.1.js" type="text/javascript"></script>
-    <%--<script src="Lib/bootstrap.js" type="text/javascript"></script>--%>
-    <%--<link rel="stylesheet" type="text/css" href="Styles/bootstrap.css" />--%>
+
 </head>
 <body>
 
@@ -27,39 +26,8 @@
         </span>
     </div>
 
-    <div>
+    <div id="gamesList">
     </div>
-    <script>
-        var adminSocket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
-
-
-
-        adminSocket.addGame = function () { }
-        adminSocket.login = function () {
-            var username = document.getElementById("usernameInput");
-            var password = document.getElementById("passwordInput");
-            adminSocket.send("LOGIN " + username.value + " " + password.value);
-        }
-        adminSocket.onmessage = function (e) {
-            console.log(e);
-            var data = e.data;
-            data = JSON.parse(data);
-
-
-
-            if (data.Token) {
-                token = data.Token;
-            }
-
-
-        }
-
-
-        $("#loginButton").click(function () {
-            adminSocket.login();
-        })
-
-
-    </script>
+    <script src="Default.js" type="text/javascript"></script>
 </body>
 </html>
