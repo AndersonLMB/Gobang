@@ -7,6 +7,7 @@ var clearGamesList = function () {
 };
 var addGamesInList = function (Games) {
     Games.forEach(function (game) {
+        
         console.log(game.GameGrids);
     })
 };
@@ -26,6 +27,10 @@ adminSocket.login = function () {
     adminSocket.send("LOGIN " + username.value + " " + password.value);
     user = username.value;
 };
+adminSocket.refresh = function () {
+    adminSocket.send("GETGAMES");
+}
+
 adminSocket.onmessage = function (e) {
     console.log(e);
     var data = e.data;
@@ -40,7 +45,10 @@ adminSocket.onmessage = function (e) {
 };
 $("#loginButton").click(function () {
     adminSocket.login();
-})
+});
 $("#addGameButton").click(function () {
     adminSocket.addGame();
-})
+});
+$("#refreshGamesButton").click(function () {
+    adminSocket.refresh();
+});

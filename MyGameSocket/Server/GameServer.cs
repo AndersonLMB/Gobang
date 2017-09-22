@@ -37,14 +37,45 @@ namespace MyGameSocket.Server
         {
             this.WSGameServer.Start();
         }
-
-
-
-
     }
 
     class PlayerActions : WebSocketBehavior
     {
+        private Boolean TokenCorrect(string name, int token)
+        {
+            using (var connection = new Npgsql.NpgsqlConnection(ConfigurationManager.ConnectionStrings["users"].ConnectionString))
+            {
+                connection.Open();
+                User input = new User();
+                User correct = new User();
+                input.Name = name;
+                //input.Token = token;
+                int inputToken = 0;
+                inputToken = token;
+                int correctToken = 0;
+                var users = connection.Query<User>("SELECT * FROM users WHERE \"name\"='" + input.Name + "';");
+
+                if (users.AsList<User>().Count == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    correct = users.AsList<User>()[0];
+                    correctToken = (correct.Name + correct.Password).GetHashCode().GetHashCode();
+                    if (inputToken == correctToken)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+
         protected override void OnOpen()
         {
             base.OnOpen();
@@ -56,14 +87,26 @@ namespace MyGameSocket.Server
             //Login
             if (message[0] == "LOGIN")
             {
-
-                string loginStatus;
-                Player player = new Player(message[1]);
-                OnlinePlayers.AddPlayer(player, out loginStatus);
+                string inputName = message[1];
+                string inputPassword = message[2];
+                int inputToken = (inputName + inputPassword).GetHashCode().GetHashCode();
+                Boolean pass = TokenCorrect(inputName, inputToken);
+                if (pass)
+                {
+                    string json = JsonConvert.SerializeObject(new DynamicMessage("LOGIN_SUCCESS", inputToken));
+                    Send(json);
+                }
+                else
+                {
+                    string json = JsonConvert.SerializeObject(new LoginCallbackMessage("FAILED"));
+                }
+                //string loginStatus;
+                //Player player = new Player(message[1]);
+                //OnlinePlayers.AddPlayer(player, out loginStatus);
+                ////LoginCallback(loginStatus);
+                //string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlinePlayers.GetPlayers());
+                //Send(json);
                 //LoginCallback(loginStatus);
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlinePlayers.GetPlayers());
-                Send(json);
-                LoginCallback(loginStatus);
             }
 
             if (message[0] == "ADMIN")
@@ -184,7 +227,7 @@ namespace MyGameSocket.Server
             }
             if (message[0] == "GETGAMES")
             {
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlineGames.GetGames());
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(new DynamicMessage("GAMES", OnlineGames.GetGames()));
                 Send(json);
             }
             if (message[0] == "LOGIN")

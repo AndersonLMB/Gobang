@@ -23,6 +23,7 @@
         </span>
         <span>
             <button id="addGameButton">Add Game</button>
+            <button id="refreshGamesButton">Refresh</button>
         </span>
     </div>
 
