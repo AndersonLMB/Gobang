@@ -13,6 +13,8 @@
 <body>
 
     <div>
+        <input id="usernameInput" type="text" />
+        <input id="passwordInput" type="password" />
         <button id="loginButton">Log in</button>
         <button id="exitButton">Exit</button>
     </div>
@@ -26,10 +28,33 @@
     </div>
 
     <div>
-
     </div>
     <script>
         var adminSocket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
+        
+
+
+        adminSocket.addGame = function () { }
+        adminSocket.login = function () {
+            var username = document.getElementById("usernameInput");
+            var password = document.getElementById("passwordInput");
+            adminSocket.send("LOGIN " + username.value + " " + password.value);
+        }
+        adminSocket.onmessage = function (e) {
+            console.log(e);
+            var data = e.data;
+            data = JSON.parse(data);
+            if (data.Token) {
+                token = data.Token;
+            }
+            console.log(data);
+        }
+
+
+        $("#loginButton").click(function () {
+            adminSocket.login();
+        })
+
 
     </script>
 </body>

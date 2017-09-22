@@ -169,7 +169,7 @@ namespace MyGameSocket.Server
                 GobangGame game = new GobangGame();
                 if (TokenCorrect(message[1], Convert.ToInt32(message[2])))
                 {
-                    
+
                     game.Administrator = new Player(message[1]);
                     OnlineGames.AddGame(game);
                     MainScreenMessage mainScreenMessage = new MainScreenMessage("Update");
@@ -220,7 +220,9 @@ namespace MyGameSocket.Server
 
                     if (pass == true)
                     {
-                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginCallbackMessage("TOKEN " + correctToken.ToString()));
+                        LoginCallbackMessage loginCallbackMessage = new LoginCallbackMessage("TOKEN " + correctToken.ToString());
+                        loginCallbackMessage.Token = correctToken;
+                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(loginCallbackMessage);
                         Send(json);
                     }
                     else
