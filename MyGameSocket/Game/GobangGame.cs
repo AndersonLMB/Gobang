@@ -10,7 +10,7 @@ namespace MyGameSocket.Game
     public class GobangGame
     {
         //public int[] GameGrids;
-
+        public string Name;
         public List<Grid> GameGrids = new List<Grid>();
         public List<Player> Players = new List<Player>();
         public Player Administrator;
@@ -22,6 +22,7 @@ namespace MyGameSocket.Game
         public int WinCount;
         public GobangGame()
         {
+
             //GameGrids.Capacity = 225;
             //GameGrids.Count = 225;
             X = 15;
@@ -35,6 +36,7 @@ namespace MyGameSocket.Game
                 GameGrids.Add(grid);
             }
             WinLogs = new List<WinLog>();
+            Name = Time.ToString();
         }
 
         public void AddPlayer(Player player)

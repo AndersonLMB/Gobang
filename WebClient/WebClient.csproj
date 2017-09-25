@@ -76,14 +76,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Chessboard.aspx" />
+    <Content Include="Chessboard.js" />
     <Content Include="Default.aspx" />
     <Content Include="Default.js" />
     <Content Include="Lib\bootstrap.js" />
     <Content Include="Lib\jquery-3.2.1.js" />
+    <Content Include="Lib\template.js" />
     <Content Include="Styles\bootstrap.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chessboard.aspx.cs">
+      <DependentUpon>Chessboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Chessboard.aspx.designer.cs">
+      <DependentUpon>Chessboard.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

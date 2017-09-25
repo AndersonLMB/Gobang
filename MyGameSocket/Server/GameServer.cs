@@ -1,22 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using System.Net.WebSockets;
-using System.Net;
-using WebSocketSharp.Net.WebSockets;
-using WebSocketSharp.Net;
-using WebSocketSharp.Server;
-using WebSocketSharp;
+﻿using Dapper;
 using MyGameSocket.Game;
-using System.Xml;
 using Newtonsoft.Json;
-using Npgsql;
-using Dapper;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Security.Cryptography;
+using WebSocketSharp;
+using WebSocketSharp.Server;
 
 namespace MyGameSocket.Server
 {
@@ -99,6 +88,7 @@ namespace MyGameSocket.Server
                 else
                 {
                     string json = JsonConvert.SerializeObject(new LoginCallbackMessage("FAILED"));
+                    Send(json);
                 }
                 //string loginStatus;
                 //Player player = new Player(message[1]);
@@ -107,6 +97,17 @@ namespace MyGameSocket.Server
                 //string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlinePlayers.GetPlayers());
                 //Send(json);
                 //LoginCallback(loginStatus);
+            }
+
+            if (message[0] == "GETGAMES")
+            {
+                string json = JsonConvert.SerializeObject(new DynamicMessage("GAMES", OnlineGames.GetGames()));
+                Send(json);
+            }
+            if (message[0] == "GETPLAYERS")
+            {
+                string json = JsonConvert.SerializeObject(new DynamicMessage("PLAYERS", OnlinePlayers.GetPlayers()));
+                Send(json);
             }
 
             if (message[0] == "ADMIN")

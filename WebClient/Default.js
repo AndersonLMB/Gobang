@@ -1,4 +1,4 @@
-﻿adminSocket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
+﻿socket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
 var token;
 var user;
 
@@ -7,9 +7,9 @@ var clearGamesList = function () {
 };
 var addGamesInList = function (Games) {
     Games.forEach(function (game) {
-        
+
         console.log(game.GameGrids);
-    })
+    });
 };
 var updateGames = function (Games) {
     clearGamesList();
@@ -18,37 +18,37 @@ var updateGames = function (Games) {
 //var updateGames = function () {
 //    updateGamesList();
 //}
-adminSocket.addGame = function () {
+socket.addGame = function () {
     this.send("ADDGAME " + user + " " + token);
 };
-adminSocket.login = function () {
+socket.login = function () {
     var username = document.getElementById("usernameInput");
     var password = document.getElementById("passwordInput");
-    adminSocket.send("LOGIN " + username.value + " " + password.value);
+    socket.send("LOGIN " + username.value + " " + password.value);
     user = username.value;
 };
-adminSocket.refresh = function () {
-    adminSocket.send("GETGAMES");
-}
+socket.refresh = function () {
+    socket.send("GETGAMES");
+};
 
-adminSocket.onmessage = function (e) {
+socket.onmessage = function (e) {
     console.log(e);
     var data = e.data;
     data = JSON.parse(data);
 
     if (data.Head === "LOGIN_SUCCESS") {
         token = data.Body;
-    };
+    }
     if (data.Head === "Update") {
         updateGames(data.Games);
-    };
+    }
 };
 $("#loginButton").click(function () {
-    adminSocket.login();
+    socket.login();
 });
 $("#addGameButton").click(function () {
-    adminSocket.addGame();
+    socket.addGame();
 });
 $("#refreshGamesButton").click(function () {
-    adminSocket.refresh();
+    socket.refresh();
 });
