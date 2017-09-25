@@ -104,6 +104,15 @@ namespace MyGameSocket.Server
                 string json = JsonConvert.SerializeObject(new DynamicMessage("GAMES", OnlineGames.GetGames()));
                 Send(json);
             }
+
+            if (message[0] == "GETGAME")
+            {
+                string gameName = message[1];
+                GobangGame game = OnlineGames.Games.Find(x => x.Name == gameName);
+                string json = JsonConvert.SerializeObject(new DynamicMessage("MAINGAME", game));
+                Send(json);
+            }
+
             if (message[0] == "GETPLAYERS")
             {
                 string json = JsonConvert.SerializeObject(new DynamicMessage("PLAYERS", OnlinePlayers.GetPlayers()));

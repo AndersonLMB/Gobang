@@ -73,10 +73,13 @@ socket.onmessage = function (e) {
         token = data.Body;
     }
     if (data.Head === "Update") {
-        updateGames(data.Games);
+        updateGames(data.Games, { scale: 10 });
     }
     if (data.Head === "GAMES") {
-        updateGames(data.Body);
+        updateGames(data.Body, { scale: 10 });
+    }
+    if (data.Head === "MAINGAME") {
+        renderMainGame(data.Body, { scale: 25, addListen: true });
     }
 };
 
@@ -86,4 +89,19 @@ $("#loginButton").click(function () {
 
 $("#refreshGamesButton").click(function () {
     socket.refresh();
+    //$("#join" + game.Name).click(function () {
+    //    activateGame(game.Name, user, token, {});
+    //});
 });
+var activateGame = function (name, user, token, options) {
+    socket.send("GETGAME " + name);
+    console.log(arguments);
+}
+
+var renderMainGame = function (game, options) {
+    var canvas = document.getElementById("mainGameCanvas");
+    var ctx = canvas.getContext("2d");
+    renderGame(ctx, game, options);
+
+    console.log(game);
+}

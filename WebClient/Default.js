@@ -40,10 +40,10 @@ socket.onmessage = function (e) {
         token = data.Body;
     }
     if (data.Head === "Update") {
-        updateGames(data.Games);
+        updateGames(data.Games, { scale: 10 });
     }
     if (data.Head === "GAMES") {
-        updateGames(data.Body);
+        updateGames(data.Body, { scale: 10 });
     }
 };
 $("#loginButton").click(function () {
