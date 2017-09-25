@@ -2,19 +2,19 @@
 var token;
 var user;
 
-var clearGamesList = function () {
+//var clearGamesList = function () {
 
-};
-var addGamesInList = function (Games) {
-    Games.forEach(function (game) {
+//};
+//var addGamesInList = function (Games) {
+//    Games.forEach(function (game) {
 
-        console.log(game.GameGrids);
-    });
-};
-var updateGames = function (Games) {
-    clearGamesList();
-    addGamesInList(Games);
-};
+//        console.log(game.GameGrids);
+//    });
+//};
+//var updateGames = function (Games) {
+//    clearGamesList();
+//    addGamesInList(Games);
+//};
 //var updateGames = function () {
 //    updateGamesList();
 //}
@@ -41,6 +41,9 @@ socket.onmessage = function (e) {
     }
     if (data.Head === "Update") {
         updateGames(data.Games);
+    }
+    if (data.Head === "GAMES") {
+        updateGames(data.Body);
     }
 };
 $("#loginButton").click(function () {

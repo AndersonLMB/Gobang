@@ -228,7 +228,7 @@ namespace MyGameSocket.Server
             }
             if (message[0] == "GETGAMES")
             {
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(new DynamicMessage("GAMES", OnlineGames.GetGames()));
+                string json = JsonConvert.SerializeObject(new DynamicMessage("GAMES", OnlineGames.GetGames()));
                 Send(json);
             }
             if (message[0] == "LOGIN")

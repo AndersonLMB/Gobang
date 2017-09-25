@@ -83,7 +83,9 @@
     <Content Include="Lib\bootstrap.js" />
     <Content Include="Lib\jquery-3.2.1.js" />
     <Content Include="Lib\template.js" />
+    <Content Include="Scripts\game.js" />
     <Content Include="Styles\bootstrap.css" />
+    <Content Include="Template\game.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
