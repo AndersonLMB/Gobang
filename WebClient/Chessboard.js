@@ -96,12 +96,13 @@ $("#refreshGamesButton").click(function () {
 var activateGame = function (name, user, token, options) {
     socket.send("GETGAME " + name);
     console.log(arguments);
-}
+};
 
 var renderMainGame = function (game, options) {
     var canvas = document.getElementById("mainGameCanvas");
     var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     renderGame(ctx, game, options);
 
     console.log(game);
-}
+};
