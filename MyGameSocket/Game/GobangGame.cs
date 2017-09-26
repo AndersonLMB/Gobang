@@ -17,18 +17,15 @@ namespace MyGameSocket.Game
         public List<WinLog> WinLogs;
         public int Time;
         //public int UnixTime;
-
+        public List<Step> Steps = new List<Step>();
         public int X, Y;
         public int WinCount;
+
         public GobangGame()
         {
-
-            //GameGrids.Capacity = 225;
-            //GameGrids.Count = 225;
             X = 15;
             Y = 15;
             WinCount = 5;
-            //Time = DateTime.Now;
             Time = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             for (var i = 0; i < X * Y; i++)
             {
@@ -43,11 +40,39 @@ namespace MyGameSocket.Game
         {
             Players.Add(player);
         }
-        public void ExecuteStep(int x, int y, Player player)
+        public void ExecuteStep(int x, int y, Player player, out string stepMessage)
         {
+            stepMessage = "";
             Grid grid = GetGrid(x, y);
-            int value = Players.IndexOf(player);
-            SetGrid(x, y, value, player.Name);
+            if (grid.Value >= 0)
+            {
+
+            }
+            else
+            {
+                int value = Players.IndexOf(player);
+
+                if (Steps.Count == 0)
+                {
+                    SetGrid(x, y, value, player.Name);
+                    Step step = new Step(player, DateTime.Now, value);
+                    Steps.Add(step);
+                }
+                else
+                {
+                    if (value != Steps[Steps.Count - 1].Value)
+                    {
+                        SetGrid(x, y, value, player.Name);
+                        Step step = new Step(player, DateTime.Now, value);
+                        Steps.Add(step);
+                    }
+                }
+                if (Win())
+                {
+                    stepMessage = "WIN";
+                }
+            }
+
         }
         public Grid GetGrid(int x, int y)
         {
@@ -110,9 +135,9 @@ namespace MyGameSocket.Game
         {
             int value;
             bool win = false;
-            for (var y = 0; y < Y; y++)
+            for (var y = 0; y < Y - WinCount; y++)
             {
-                for (var x = 0; x <= X - WinCount; x++)
+                for (var x = 0; x <= X; x++)
                 {
                     Grid grid = GetGrid(x, y);
                     value = grid.Value;
@@ -144,7 +169,7 @@ namespace MyGameSocket.Game
         {
             int value;
             bool win = false;
-            for (var y = 0; y < Y; y++)
+            for (var y = 0; y < Y - WinCount; y++)
             {
                 for (var x = 0; x <= X - WinCount; x++)
                 {
@@ -264,4 +289,17 @@ namespace MyGameSocket.Game
 
     }
 
+    public class Step
+    {
+        public Player Player;
+        public DateTime Time;
+        public int Value;
+
+        public Step(Player player, DateTime time, int value)
+        {
+            Player = player;
+            Time = time;
+            Value = value;
+        }
+    }
 }

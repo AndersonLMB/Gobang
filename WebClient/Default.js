@@ -1,23 +1,6 @@
 ﻿socket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
 var token;
 var user;
-
-//var clearGamesList = function () {
-
-//};
-//var addGamesInList = function (Games) {
-//    Games.forEach(function (game) {
-
-//        console.log(game.GameGrids);
-//    });
-//};
-//var updateGames = function (Games) {
-//    clearGamesList();
-//    addGamesInList(Games);
-//};
-//var updateGames = function () {
-//    updateGamesList();
-//}
 socket.addGame = function () {
     this.send("ADDGAME " + user + " " + token);
 };

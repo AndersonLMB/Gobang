@@ -145,23 +145,19 @@ namespace MyGameSocket.Server
 
             if (message[0] == "TRYSTEP")
             {
-
                 if (TokenCorrect(message[1], Convert.ToInt32(message[2])))
                 {
                     Player player = OnlinePlayers.GetPlayer(message[1]);
-                    //player = new Player(message[1]);
                     GobangGame game = OnlineGames.GetGame(message[3]);
-                    game.ExecuteStep(Convert.ToInt32(message[4]), Convert.ToInt32(message[5]), player);
+                    game.ExecuteStep(Convert.ToInt32(message[4]), Convert.ToInt32(message[5]), player, out string stepMessage);
                     string json = JsonConvert.SerializeObject(new DynamicMessage("UPDATEMAINGAME", game));
-                    Send(json);
+                    Sessions.Broadcast(json);
+                    if (stepMessage == "WIN")
+                    {
+                        string jsonWin = JsonConvert.SerializeObject(new DynamicMessage("WIN", game.Steps[game.Steps.Count - 1]));
+                        Sessions.Broadcast(jsonWin);
+                    }
                 }
-
-
-
-                //game.ExecuteStep(message[4], message[5],);
-                //    GobangGame game = new GobangGame();
-                //    game.Administrator = new Player(message[1]);
-                //    OnlineGames.AddGame(game);
             }
 
 
@@ -325,44 +321,8 @@ namespace MyGameSocket.Server
                         string json = Newtonsoft.Json.JsonConvert.SerializeObject(new LoginCallbackMessage("FAILED"));
                         Send(json);
                     }
-
-                    //correct= connection.QueryFirst<User>()
-
-
-
-                    //if (message.Length >= 4)
-                    //{
-                    //    string token = "";
-                    //    token = input.name + input.password;
-                    //    inputToken = token.GetHashCode();
-                    //}
-
-
                 }
-
-                //string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlineGames.GetGames());
-                //Send(json);
             }
-
-
-
-
-            //if (message[0] == "ADMIN")
-            //{
-            //    if (message[1] == "ADDGAME")
-            //    {
-            //        GobangGame game = new GobangGame();
-            //        game.Administrator = new Player(message[1]);
-            //        OnlineGames.AddGame(game);
-            //    }
-            //    if (message[1] == "GETGAMES")
-            //    {
-            //        string json = Newtonsoft.Json.JsonConvert.SerializeObject(OnlineGames.GetGames());
-            //        Send(json);
-            //    }
-
-
-            //}
             base.OnMessage(e);
         }
     }
