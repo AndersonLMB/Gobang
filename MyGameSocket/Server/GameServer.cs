@@ -82,8 +82,13 @@ namespace MyGameSocket.Server
                 Boolean pass = TokenCorrect(inputName, inputToken);
                 if (pass)
                 {
-                    string json = JsonConvert.SerializeObject(new DynamicMessage("LOGIN_SUCCESS", inputToken));
-                    Send(json);
+                    Player player = new Player(inputName);
+                    OnlinePlayers.AddPlayer(player, out string statusString);
+                    if (statusString == "NULL")
+                    {
+                        string json = JsonConvert.SerializeObject(new DynamicMessage("LOGIN_SUCCESS", inputToken));
+                        Send(json);
+                    }
                 }
                 else
                 {
@@ -125,6 +130,42 @@ namespace MyGameSocket.Server
                 game.Administrator = new Player(message[1]);
                 OnlineGames.AddGame(game);
             }
+
+            if (message[0] == "JOINGAME")
+            {
+                if (TokenCorrect(message[2], Convert.ToInt32(message[3])))
+                {
+                    GobangGame game = OnlineGames.GetGame(message[1]);
+                    Player player = OnlinePlayers.GetPlayer(message[2]);
+                    game.AddPlayer(player);
+                    string json = JsonConvert.SerializeObject(new DynamicMessage("MAINGAME", game));
+                    Send(json);
+                }
+            }
+
+            if (message[0] == "TRYSTEP")
+            {
+
+                if (TokenCorrect(message[1], Convert.ToInt32(message[2])))
+                {
+                    Player player = OnlinePlayers.GetPlayer(message[1]);
+                    //player = new Player(message[1]);
+                    GobangGame game = OnlineGames.GetGame(message[3]);
+                    game.ExecuteStep(Convert.ToInt32(message[4]), Convert.ToInt32(message[5]), player);
+                    string json = JsonConvert.SerializeObject(new DynamicMessage("UPDATEMAINGAME", game));
+                    Send(json);
+                }
+
+
+
+                //game.ExecuteStep(message[4], message[5],);
+                //    GobangGame game = new GobangGame();
+                //    game.Administrator = new Player(message[1]);
+                //    OnlineGames.AddGame(game);
+            }
+
+
+
             base.OnMessage(e);
         }
         protected override void OnClose(CloseEventArgs e)

@@ -81,6 +81,9 @@ socket.onmessage = function (e) {
     if (data.Head === "MAINGAME") {
         renderMainGame(data.Body, { scale: 25, addListen: true });
     }
+    if (data.Head === "UPDATEMAINGAME") {
+        renderMainGame(data.Body, { scale: 25 });
+    }
 };
 
 $("#loginButton").click(function () {
@@ -94,8 +97,15 @@ $("#refreshGamesButton").click(function () {
     //});
 });
 var activateGame = function (name, user, token, options) {
+    socket.send("JOINGAME " + name + " " + user + " " + token);
     socket.send("GETGAME " + name);
     console.log(arguments);
+};
+
+var tryStep = function (user, token, stepOptions) {
+
+    console.log(arguments);
+    socket.send("TRYSTEP " + user + " " + token + " " + stepOptions.game.Name + " " + stepOptions.piece.gridX + " " + stepOptions.piece.gridY);
 };
 
 var renderMainGame = function (game, options) {

@@ -46,6 +46,10 @@ namespace MyGameSocket
                     else
                     {
                         Players.Add(player);
+                        //for (var i = 0; i < OnlinePlayers.GetPlayers().AsList<Player>().Count; i++)
+                        //{
+                        //    Console.WriteLine(OnlinePlayers.GetPlayers().AsList<Player>()[i].Name);
+                        //}
                     }
                     connection.Close();
                 }
@@ -93,6 +97,12 @@ namespace MyGameSocket
         {
             return Players[index];
         }
+
+        public static Player GetPlayer(string name)
+        {
+            return Players.Find(player => player.Name == name);
+        }
+
 
         public static void DisplayAllPlayer()
         {

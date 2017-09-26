@@ -84,21 +84,49 @@ var renderChessboardListens = function (ctx, game, options) {
                 case 1:
                     element.type = "full";
             }
+            element.gridX = x;
+            element.gridY = y;
             pieces.push(element);
         }
     }
-    jQuery(ctx.canvas).unbind("click");
-    jQuery(ctx.canvas).unbind("mousemove");
+    //jQuery(ctx.canvas).off("click");
+    //jQuery(ctx.canvas).unbind("mousemove");
     //ctx.canvas.removeEventListener("click");
     //ctx.canvas.removeEventListener("mousemove");
-    ctx.canvas.addEventListener("click", function (evt) {
+    //$(ctx.canvas).click(function (evt) {
+    //    pieces.forEach(function (piece) {
+    //        if (piece.boolContainXY(evt.layerX, evt.layerY)) {
+    //            console.log(piece);
+    //            tryStep(user, token, { game: game, piece: piece });
+
+    //            //if (piece.grid.Value >= 0) {
+
+    //            //    //console.log("This grid is already occupied")
+    //            //}
+    //            //else {
+
+    //            //}
+    //        }
+    //    });
+    //});
+    var handleClick = function (evt) {
         pieces.forEach(function (piece) {
             if (piece.boolContainXY(evt.layerX, evt.layerY)) {
-
                 console.log(piece);
+                tryStep(user, token, { game: game, piece: piece });
+
+                //if (piece.grid.Value >= 0) {
+
+                //    //console.log("This grid is already occupied")
+                //}
+                //else {
+
+                //}
             }
         });
-    });
+    }
+    //ctx.canvas.removeEventListener("click", function (evt) { handleClick(evt); });
+    ctx.canvas.addEventListener("click", function (evt) { handleClick(evt); });
     //ctx.canvas.addEventListener("mousemove", function (evt) {
     //    pieces.forEach(function (piece) {
     //        if (piece.boolContainXY(evt.layerX, evt.layerY)) {
@@ -170,3 +198,20 @@ var updateGames = function (Games, options) {
     clearGamesList();
     addGamesInList(Games, options);
 };
+
+//var handleClick = function (evt) {
+//    pieces.forEach(function (piece) {
+//        if (piece.boolContainXY(evt.layerX, evt.layerY)) {
+//            console.log(piece);
+//            tryStep(user, token, { game: game, piece: piece });
+
+//            //if (piece.grid.Value >= 0) {
+
+//            //    //console.log("This grid is already occupied")
+//            //}
+//            //else {
+
+//            //}
+//        }
+//    });
+//}

@@ -19,8 +19,8 @@
 </head>
 <body>
     <div>
-        <input id="usernameInput" type="text" />
-        <input id="passwordInput" type="password" />
+        <input id="usernameInput" type="text" value="Hu" />
+        <input id="passwordInput" type="password" value="123" />
         <button id="loginButton">Log in</button>
         <button id="exitButton">Exit</button>
     </div>

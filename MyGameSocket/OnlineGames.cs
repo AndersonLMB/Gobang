@@ -19,6 +19,12 @@ namespace MyGameSocket
             return Games[index];
         }
 
+        public static GobangGame GetGame(string indexString)
+        {
+            return Games.Find(x => x.Name == indexString);
+            //return Games[index];
+        }
+
         public static List<GobangGame> GetGames()
         {
             return Games;
