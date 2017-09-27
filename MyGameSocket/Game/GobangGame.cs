@@ -34,6 +34,7 @@ namespace MyGameSocket.Game
             }
             WinLogs = new List<WinLog>();
             Name = Time.ToString();
+            this.Administrator = new Player("null");
         }
 
         public void AddPlayer(Player player)
@@ -70,6 +71,39 @@ namespace MyGameSocket.Game
                 if (Win())
                 {
                     stepMessage = "WIN";
+                }
+            }
+
+        }
+
+        public void ExecuteStep(int x, int y, Player player)
+        {
+            Grid grid = GetGrid(x, y);
+            if (grid.Value >= 0)
+            {
+
+            }
+            else
+            {
+                int value = Players.IndexOf(player);
+
+                if (Steps.Count == 0)
+                {
+                    SetGrid(x, y, value, player.Name);
+                    Step step = new Step(player, DateTime.Now, value);
+                    Steps.Add(step);
+                }
+                else
+                {
+                    if (value != Steps[Steps.Count - 1].Value)
+                    {
+                        SetGrid(x, y, value, player.Name);
+                        Step step = new Step(player, DateTime.Now, value);
+                        Steps.Add(step);
+                    }
+                }
+                if (Win())
+                {
                 }
             }
 

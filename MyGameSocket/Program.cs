@@ -12,9 +12,10 @@ namespace MyGameSocket
 {
     class Program
     {
+        static GameServer gameServer = new GameServer("ws://192.168.0.14:1836");
         static void Main(string[] args)
         {
-            GameServer gameServer = new GameServer("ws://127.0.0.1:1836");
+            //GameServer gameServer = new GameServer("ws://192.168.0.14:1836");
             gameServer.Start();
             #region TEST 1 
             //GobangGame game = new GobangGame();
@@ -38,7 +39,7 @@ namespace MyGameSocket
             //Console.WriteLine(game.Win());
             #endregion
             Console.ReadLine();
-
+            gameServer.End();
         }
     }
 }

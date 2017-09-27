@@ -26,6 +26,16 @@ namespace MyGameSocket.Server
         {
             this.WSGameServer.Start();
         }
+
+        public void End()
+        {
+            bool a = WSGameServer.WebSocketServices.TryGetServiceHost("/PlayerActions", out WebSocketServiceHost host);
+            
+            host.Sessions.Broadcast("ended");
+            WSGameServer.WebSocketServices["/PlayerActions"].Sessions.Broadcast("Service Ended");
+            WSGameServer.WebSocketServices["/AdminActions"].Sessions.Broadcast("Service Ended");
+            this.WSGameServer.Stop();
+        }
     }
 
     class PlayerActions : WebSocketBehavior
@@ -249,6 +259,12 @@ namespace MyGameSocket.Server
             }
         }
 
+        protected override void OnOpen()
+        {
+            Send("connected");
+            base.OnOpen();
+        }
+
         protected override void OnMessage(MessageEventArgs e)
         {
 
@@ -325,6 +341,14 @@ namespace MyGameSocket.Server
             }
             base.OnMessage(e);
         }
+
+        protected override void OnClose(CloseEventArgs e)
+        {
+            Console.WriteLine("closed");
+            Send("closed");
+            base.OnClose(e);
+        }
+
     }
 
     class PlayActions : WebSocketBehavior

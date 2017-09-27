@@ -1,4 +1,5 @@
-﻿socket = new WebSocket("ws://127.0.0.1:1836/PlayerActions");
+﻿//socket = new WebSocket("ws://127.0.0.1:1836/PlayerActions");
+socket = new WebSocket("ws://192.168.0.14:1836/PlayerActions");
 var token;
 var user;
 
@@ -19,6 +20,7 @@ socket.onmessage = function (e) {
 
     if (data.Head === "LOGIN_SUCCESS") {
         token = data.Body;
+        socket.refresh();
     }
     if (data.Head === "Update") {
         updateGames(data.Games, { scale: 10 });

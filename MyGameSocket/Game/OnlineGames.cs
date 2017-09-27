@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MyGameSocket.Game;
 
 
-namespace MyGameSocket
+namespace MyGameSocket.Game
 {
     public static class OnlineGames
     {

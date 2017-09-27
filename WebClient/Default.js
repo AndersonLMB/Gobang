@@ -1,4 +1,5 @@
-﻿socket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
+﻿//socket = new WebSocket("ws://127.0.0.1:1836/AdminActions");
+socket = new WebSocket("ws://192.168.0.14:1836/AdminActions");
 var token;
 var user;
 socket.addGame = function () {
@@ -21,6 +22,7 @@ socket.onmessage = function (e) {
 
     if (data.Head === "LOGIN_SUCCESS") {
         token = data.Body;
+        socket.refresh();
     }
     if (data.Head === "Update") {
         updateGames(data.Games, { scale: 10 });
@@ -38,3 +40,4 @@ $("#addGameButton").click(function () {
 $("#refreshGamesButton").click(function () {
     socket.refresh();
 });
+
